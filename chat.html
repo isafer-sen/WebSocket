@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+ 
+<head>
+    <meta charset="utf-8">
+    <style>
+        *{
+            margin:0px;
+            padding:0px;
+        }
+    </style>
+</head>
+ 
+<body>
+    <div style="margin-left:400px">
+        <div style="border:1px solid;width: 600px;height: 500px;">
+            <div id="msgArea" style="width:100%;height: 100%;text-align:start;resize: none;font-family: 微软雅黑;font-size: 20px;overflow-y: scroll"></div>
+        </div>
+        <div style="border:1px solid;width: 600px;height: 200px;">
+            <div style="width:100%;height: 100%;">
+                <textarea id="userMsg" style="width:100%;height: 100%;text-align:start;resize: none;font-family: 微软雅黑;font-size: 20px;"></textarea>
+            </div>
+        </div>
+        <div style="border:1px solid;width: 600px;height: 25px;">
+            <button style="float: right;" onclick="sendMsg()">发送</button>
+        </div>
+    </div>
+</body>
+ 
+</html>
+<script src="jquery-1.8.3.min.js"></script>
+<script>
+    $(function(){
+        link();
+    })
+    function link(){
+         //连接websocket 服务
+          webserver="ws://192.168.22.34:9501";
+        //实例化
+         webSocket=new WebSocket(webserver);
+        //建立连接
+        webSocket.onopen=function(env){
+            console.log("连接成功");
+        };
+        //连接关闭
+        webSocket.onclose=function(env){
+            console.log("连接关闭");
+        }
+        //接收服务端返回的消息
+        webSocket.onmessage=function(env){
+            // console.log(env.data);
+            $("#msgArea").append(env.data);
+        }
+    }
+
+    //发送消息给服务端
+    function sendMsg(){
+            // alert('ss');
+            msg=$("#userMsg").val();
+            // alert(msg);
+            // alert(msg);
+            webSocket.send(msg);
+    }
+   
+</script>
